@@ -5,9 +5,10 @@ cd patient-registration-backend
 ```docker compose up -d --build  ```  
 Laravel will run in localhost:8080/api
 ### without docker:
-```php artisan migrate  ```
+```php artisan migrate  ```  
 ```php artisan queue:table```  
 ```php artisan migrate```  
+```php artisan storage:link```  
 ```php artisan serve```  
 In another terminal run the worker for asynchronus mailing:  
 ```php artisan queue:work --tries=3```   
