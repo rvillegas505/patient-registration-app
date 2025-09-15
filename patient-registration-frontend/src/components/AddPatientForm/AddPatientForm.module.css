@@ -1,0 +1,62 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.formField {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.customInput{
+  padding: 0.30rem;
+  border-radius: 0.5rem;
+  background-color: #f3f0f0;
+  border: none;
+  resize: none;
+  font-size: 1rem;
+}
+
+.customInput:focus {
+  outline: 2px solid #007bff;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+.phone {
+  display: flex;
+  gap: 8px;
+}
+
+.phone input:first-child {
+  flex: 1;
+  max-width: 100px;
+}
+.phone input:last-child {
+  flex: 3; 
+}
+
+.dropzone {
+  border: 2px dashed #aaa;
+  background-color: #f3f0f0;
+  border-radius: 8px;
+  padding: 30px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.dropzone p {
+  margin: 0;
+  color: #555;
+}
+
+.dropzone.active {
+  border-color: #007bff;
+  background-color: #f0f8ff;
+}
