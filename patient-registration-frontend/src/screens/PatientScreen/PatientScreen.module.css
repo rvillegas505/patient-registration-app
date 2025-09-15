@@ -1,6 +1,4 @@
-.container {
+.patientListContainer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  padding: 16px;
+  justify-content: center;
 }

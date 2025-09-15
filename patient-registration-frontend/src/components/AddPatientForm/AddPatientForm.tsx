@@ -2,6 +2,7 @@ import { useState, type DragEvent, useRef } from "react";
 import { useForm } from "react-hook-form";
 import styles from "./AddPatientForm.module.css";
 import Button from "../Button/Button";
+import Spinner from "../Spinner/Spinner";
 
 interface FormData {
   fullName: string;
@@ -12,11 +13,12 @@ interface FormData {
 }
 
 interface Props {
-  onSubmit: (data: FormData) => void;
+  //onSubmit: (data: FormData) => void;
+  onSubmit: (data: FormData) => Promise<void>;
 }
 
 const AddPatientForm = ({ onSubmit } : Props) => {
-  const { register, handleSubmit, formState: { errors }, setValue, trigger, watch } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, trigger, watch } = useForm<FormData>();
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -128,8 +130,8 @@ const AddPatientForm = ({ onSubmit } : Props) => {
 
         {(errors.phoneCountry || errors.phoneNumber) && (
           <div className={styles.error}>
-            {errors.phoneCountry && <p>{errors.phoneCountry.message}</p>}
-            {errors.phoneNumber && <p>{errors.phoneNumber.message}</p>}
+            <p>{errors.phoneCountry?.message || "\u00A0"}</p>
+            <p>{errors.phoneNumber?.message || "\u00A0"}</p>
           </div>
         )}
       </div>
@@ -162,7 +164,11 @@ const AddPatientForm = ({ onSubmit } : Props) => {
         {errors.documentPhoto && <p className={styles.error}>File required</p>}
       </div>
 
-      <Button type="submit">Add Patient</Button>
+      {/* <Button type="submit">Add Patient</Button> */}
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Adding..." : "Add Patient"}</Button>
+        {isSubmitting && <Spinner />}
+      </div>
     </form>
   );
 };

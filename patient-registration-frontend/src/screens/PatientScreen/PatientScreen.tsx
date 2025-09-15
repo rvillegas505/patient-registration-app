@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { usePatients } from "../../hooks/usePatients";
-import PatientCard from "../../components/PatientCard/PatientCard";
 import styles from "./PatientScreen.module.css";
 import Modal from "../../components/Modal/Modal";
 import AddPatientForm from "../../components/AddPatientForm/AddPatientForm";
 import { addPatient } from "../../services/patientService";
 import Button from "../../components/Button/Button";
 import Spinner from "../../components/Spinner/Spinner";
+import PatientList from "../../components/PatientList/PatientList";
 
 const PatientsScreen = () => {
   const { patients, loading, error, refetchPatients } = usePatients();
@@ -71,10 +71,11 @@ const PatientsScreen = () => {
       ) : patients.length === 0 ? (
         <p>No patients found</p>
       ) : (
-        <div className={styles.container}>
-          {patients.map((patient) => (
-            <PatientCard key={patient.id} patient={patient} />
-          ))}
+        
+        <div className={styles.patientListContainer}>
+          
+          <PatientList patients={patients} />
+
         </div>
       )}
     </div>

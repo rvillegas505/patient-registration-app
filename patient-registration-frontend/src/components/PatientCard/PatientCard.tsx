@@ -7,7 +7,7 @@ interface Props {
   patient: Patient;
 }
 
-const IMAGE_BASE_URL = "http://localhost:8000/storage/";
+const IMAGE_BASE_URL = import.meta.env.VITE_STORAGE_URL || "http://localhost:8000/storage/";
 
 const PatientCard= ({ patient }: Props)  => {
   const [expanded, setExpanded] = useState(false);

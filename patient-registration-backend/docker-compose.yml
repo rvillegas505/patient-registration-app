@@ -1,0 +1,84 @@
+version: "3.9"
+
+name: patient-registration
+
+services:
+  app:
+    build:
+      context: .
+      target: dev
+    image: patient-registration/app:dev
+    container_name: patient-registration-app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    env_file:
+      - ./.docker/env/app.env
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+    depends_on:
+      - db
+    networks:
+      - backend
+    entrypoint: ["/bin/sh", "/var/www/html/.docker/entrypoint.sh"]
+    command: ["php-fpm"]
+
+  web:
+    image: nginx:1.27-alpine
+    container_name: patient-registration-web
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/var/www/html:ro
+      - ./.docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - app
+    networks:
+      - backend
+
+  queue:
+    build:
+      context: .
+      target: dev
+    image: patient-registration/app:dev
+    container_name: patient-registration-queue
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+    env_file:
+      - ./.docker/env/app.env
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - QUEUE_CONNECTION=database
+    depends_on:
+      - app
+      - db
+    networks:
+      - backend
+    entrypoint: ["/bin/sh", "/var/www/html/.docker/entrypoint.sh"]
+    command: ["php", "artisan", "queue:work", "--tries=3", "--verbose"]
+
+  db:
+    image: postgres:16-alpine
+    container_name: patient-registration-db
+    environment:
+      POSTGRES_DB: lightit_patient_app
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "54329:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+volumes:
+  db-data:
+
+networks:
+  backend:
+    driver: bridge
+
+
