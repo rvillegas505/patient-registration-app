@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { Patient } from "../types/Patient";
 import { getPatients } from "../services/patientService";
 
-import { keysToCamel } from "../utils/case"; // ajusta la ruta según corresponda
+import { keysToCamel } from "../utils/case"; 
 
 export const usePatients = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
@@ -15,8 +15,12 @@ export const usePatients = () => {
       const data = await getPatients();
       setPatients(keysToCamel(data));
       setError(null);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      if (e instanceof Error) {
+        setError(e.message);
+      } else {
+        setError("An unknown error occurred");
+      }
     } finally {
       setLoading(false);
     }
